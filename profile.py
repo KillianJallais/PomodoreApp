@@ -4,7 +4,7 @@ class Profile:
 	TRAVAIL = "t"
 	PAUSE = "p"
 
-	def __init__(self, nbrExercice: int, tempExercice: int, tempPause: int, *fonctions):
+	def __init__(self, nbrExercice: int, tempExercice: int, tempPause: int, timeLabel, titleLabel, updateFrame):
 		self.nbrExercice = nbrExercice
 
 		self.tempExercice = tempExercice * 60 #donné en minute mais convertie en seconde
@@ -12,21 +12,19 @@ class Profile:
 
 		self.timer = None
 
-		self.fonctions = fonctions
-
 		self.nbrTimers = self.nbrExercice*2 - 1
 
-		self.initProfile()
+		self.initProfile(timeLabel, titleLabel, updateFrame)
 
-	def initProfile(self) -> None:
-		self.timer = RepetedTimer(self.tempExercice, Profile.TRAVAIL, self.fonctions)
+	def initProfile(self, timeLabel, titleLabel, updateFrame) -> None:
+		self.timer = RepetedTimer(self.tempExercice, Profile.TRAVAIL, timeLabel, titleLabel, updateFrame)
 		temp = self.timer
 
 		for i in range(1, self.nbrTimers):
 			if i%2 == 0:
-				temp.next = RepetedTimer(self.tempExercice, Profile.TRAVAIL, self.fonctions)
+				temp.next = RepetedTimer(self.tempExercice, Profile.TRAVAIL, timeLabel, titleLabel, updateFrame)
 			else:
-				temp.next = RepetedTimer(self.tempPause, Profile.PAUSE, self.fonctions)
+				temp.next = RepetedTimer(self.tempPause, Profile.PAUSE, timeLabel, titleLabel, updateFrame)
 
 			temp = temp.next
 

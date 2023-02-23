@@ -118,7 +118,7 @@ class Application:
 		self.minuteurFrame = MinuteurFrame()
 		self.window.setFrame(self.minuteurFrame)
 
-		self.profile = Profile(nbrExercice, tempExercice, tempPause, self.updateTime, self.minuteurFrame.updateFrame, self.updateTitle)
+		self.profile = Profile(nbrExercice, tempExercice, tempPause, self.minuteurFrame.temp, self.minuteurFrame.title, self.minuteurFrame.updateFrame)
 
 		self.minuteurFrame.setTime(self.profile.getTimeLeft())
 
@@ -134,16 +134,6 @@ class Application:
 		self.profile.stop()
 		self.profile = None
 		self.setMenuFrame()
-
-
-	def updateTime(self, time):
-		self.minuteurFrame.temp.setText(time)
-
-	def updateTitle(self, title):
-		if title == "t":
-			self.minuteurFrame.title.setText("Travail")
-		else:
-			self.minuteurFrame.title.setText("Pause")
 
 	def setConnections(self):
 		if self.menuFrame:

@@ -8,13 +8,14 @@ class RepetedTimer:
 	INTER = 1
 	TYPES = ["t", "p"]
 
-	def __init__(self, timeOut: int, timerType: str, fonctions):
+	def __init__(self, timeOut: int, timerType: str, timeLabel, titleLabel, updateFrame):
 		self.setTimeOut(timeOut)
 		self.setType(timerType)
 
-		self.updateTime = fonctions[0] #minuteurFrame
-		self.updateFrame = fonctions[1] #minuteurFrame
-		self.updateTitle = fonctions[2] #minuteurFrame
+		self.timeLabel = timeLabel
+		self.titleLabel = titleLabel
+
+		self.updateFrame = updateFrame #minuteurFrame
 
 		self.time = 0 #compteur
 		self.running = False
@@ -23,7 +24,7 @@ class RepetedTimer:
 		self.timer = None
 
 	def _run(self):  #partie qui execute les fonctions importé
-		self.updateTime(self.getTimeLeft())
+		self.updateTime()
 		self.time += 1
 
 		self.running = False
@@ -43,15 +44,15 @@ class RepetedTimer:
 
 	def setNext(self): #met en place le RepetedTimer suivant ou arrete tous si il n'y a pas de suivant
 		if self.next:
-			self.readAudio(RepetedTimer.SONNERIE)  #fait sonner l'alarme
-
 			self = self.next
 			self.start()
 
-			self.updateTitle(self.timerType)
-		else:
+			self.updateTitle()
+
 			self.readAudio(RepetedTimer.SONNERIE)  #fait sonner l'alarme
-			self.updateFrame()			
+		else:
+			self.updateFrame()
+			self.readAudio(RepetedTimer.SONNERIE)  #fait sonner l'alarme		
 
 	def stop(self): #arrête le RepetedTimer en cour
 		self.timer.cancel()
@@ -76,6 +77,15 @@ class RepetedTimer:
 			raise Exception(f"Le type de timer donner n'est pas valide : {timerType}")
 		else:
 			self.timerType = timerType
+
+	def updateTime(self):
+		self.timeLabel.setText(self.getTimeLeft())
+
+	def updateTitle(self):
+		if self.timerType == "t":
+			self.titleLabel.setText("Travail")
+		else:
+			self.titleLabel.setText("Pause")
 
 	def readAudio(self, fileName):
 		chunk = 1024
